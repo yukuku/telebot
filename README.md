@@ -6,6 +6,8 @@ Instructions
 
 1. Message @botfather https://telegram.me/botfather with the following text: `/newbot`
    If you don't know how to message by username, click the search field on your Telegram app and type `@botfather`, you should be able to initiate a conversation. Be careful not to send it to the wrong contact, because some users has similar usernames to `botfather`.
+   
+   ![botfather initial conversation](http://i.imgur.com/pGOtOcj.png)
 
 2. @botfather replies with `Alright, a new bot. How are we going to call it? Please choose a name for your bot.`
 
@@ -28,6 +30,8 @@ Instructions
 
 8. Type `/setprivacy` to @botfather.
 
+   ![botfather later conversation](http://i.imgur.com/ZrRdaa0.png)
+
 9. @botfather replies with `Choose a bot to change group messages settings.`
 
 10. Type `@whateversamplebot` (change to the username you set at step 5 above, but start it with `@`)
@@ -48,6 +52,8 @@ Instructions
 
 16. Type the project name, whatever you want. For example: `octopus-gorilla-123`. Make sure the Project ID is also the same.
 
+    ![App Engine registration](http://i.imgur.com/mxw8owO.png)
+    
 17. Clone this repository. If you don't understand what I am saying, click the `Download ZIP` button on the lower-right of this page, and extract the ZIP file.
 
 18. Open `app.yaml` file using a good text editor like Sublime Text. Change the `YOUR_APP_ID_HERE` to the Project ID you set on step 16, and save the file.
@@ -61,6 +67,8 @@ Instructions
 22. Click the `File` menu, choose `Add Existing Application...` and browse to the folder with the `app.yaml` and `main.py` file.
 
 23. The project ID should appear as a row at the `Name` column.
+
+    ![app engine launcher](http://i.imgur.com/SXr2Tz2.png)
 
 24. Click `Deploy`, enter your Google credentials, and your app should be installed to Google's servers.
 
