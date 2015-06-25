@@ -15,7 +15,7 @@ Instructions
 
 4. @botfather replies with `Good. Now let's choose a username for your bot. It must end in `bot`. Like this, for example: TetrisBot or tetris_bot.`
 
-5. Type whatever username you want for your bot, minimum 5 characters, and must end with `bot. For example: `whateversamplebot` 
+5. Type whatever username you want for your bot, minimum 5 characters, and must end with `bot`. For example: `whateversamplebot` 
 
 6. @botfather replies with
 
