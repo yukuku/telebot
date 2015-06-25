@@ -17,7 +17,7 @@ Instructions
 
 5. Type whatever username you want for your bot, minimum 5 characters, and must end with `bot`. For example: `whateversamplebot` 
 
-6. @botfather replies with
+6. @botfather replies with:
 
     Done! Congratulations on your new bot. You will find it at telegram.me/whateversamplebot. You can now add a description, about section and profile picture for your bot, see /help for a list of commands.
 
@@ -58,7 +58,11 @@ Instructions
 
 18. Open `app.yaml` file using a good text editor like Sublime Text. Change the `YOUR_APP_ID_HERE` to the Project ID you set on step 16, and save the file.
 
+   ![app.yaml](http://i.imgur.com/m9yRwNw.png)
+
 19. Open `main.py` file using a good text editor. Change the `YOUR_BOT_TOKEN_HERE` to the token you get from @botfather at step 6, and save the file.
+
+   ![main.py](http://i.imgur.com/oNFEdsp.png)
 
 20. Download Google App Engine SDK for Python from https://cloud.google.com/appengine/downloads and install it.
 
