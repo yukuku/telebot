@@ -1,8 +1,15 @@
+import StringIO
 import json
 import logging
+import random
 import urllib
 import urllib2
 
+# for sending images
+from PIL import Image
+import multipart
+
+# standard app engine imports
 from google.appengine.api import urlfetch
 from google.appengine.ext import ndb
 import webapp2
@@ -31,6 +38,7 @@ def getEnabled(chat_id):
     if es:
         return es.enabled
     return False
+
 
 # ================================
 
@@ -75,13 +83,25 @@ class WebhookHandler(webapp2.RequestHandler):
             logging.info('no text')
             return
 
-        def reply(msg):
-            resp = urllib2.urlopen(BASE_URL + 'sendMessage', urllib.urlencode({
-                'chat_id': str(chat_id),
-                'text': msg.encode('utf-8'),
-                'disable_web_page_preview': 'true',
-                'reply_to_message_id': str(message_id),
-            })).read()
+        def reply(msg=None, img=None):
+            if msg:
+                resp = urllib2.urlopen(BASE_URL + 'sendMessage', urllib.urlencode({
+                    'chat_id': str(chat_id),
+                    'text': msg.encode('utf-8'),
+                    'disable_web_page_preview': 'true',
+                    'reply_to_message_id': str(message_id),
+                })).read()
+            elif img:
+                resp = multipart.post_multipart(BASE_URL + 'sendPhoto', [
+                    ('chat_id', str(chat_id)),
+                    ('reply_to_message_id', str(message_id)),
+                ], [
+                    ('photo', 'image.jpg', img),
+                ])
+            else:
+                logging.error('no msg or img specified')
+                resp = None
+
             logging.info('send response:')
             logging.info(resp)
 
@@ -92,6 +112,14 @@ class WebhookHandler(webapp2.RequestHandler):
             elif text == '/stop':
                 reply('Bot disabled')
                 setEnabled(chat_id, False)
+            elif text == '/image':
+                img = Image.new('RGB', (512, 512))
+                base = random.randint(0, 16777216)
+                pixels = [base+i*j for i in range(512) for j in range(512)]  # generate sample image
+                img.putdata(pixels)
+                output = StringIO.StringIO()
+                img.save(output, 'JPEG')
+                reply(img=output.getvalue())
             else:
                 reply('What command?')
 
