@@ -78,7 +78,7 @@ class WebhookHandler(webapp2.RequestHandler):
         def reply(msg):
             resp = urllib2.urlopen(BASE_URL + 'sendMessage', urllib.urlencode({
                 'chat_id': str(chat_id),
-                'text': msg,
+                'text': msg.encode('utf-8'),
                 'disable_web_page_preview': 'true',
                 'reply_to_message_id': str(message_id),
             })).read()
