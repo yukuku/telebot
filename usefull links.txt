@@ -1,0 +1,5 @@
+This bot is made in python and works on Google app engine server, the best way to understand it is to read Telegram and Google documentation
+(and Python)
+
+Telegram bot api: https://core.telegram.org/bots/api
+Google NDB doc: https://cloud.google.com/appengine/docs/python/ndb/ (necessary to understand how the google database works)
