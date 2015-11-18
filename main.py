@@ -133,7 +133,7 @@ class WebhookHandler(webapp2.RequestHandler):
             if getEnabled(chat_id):
                 try:
                     resp1 = json.load(urllib2.urlopen('http://www.simsimi.com/requestChat?lc=en&ft=1.0&req=' + urllib.quote_plus(text.encode('utf-8'))))
-                    back = resp1.get('res')
+                    back = resp1.get('res').get('msg')
                 except urllib2.HTTPError, err:
                     logging.error(err)
                     back = str(err)
