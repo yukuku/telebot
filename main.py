@@ -15,8 +15,10 @@ from google.appengine.ext import ndb
 import webapp2
 
 TOKEN = 'YOUR_BOT_TOKEN_HERE'
+BOTAN_TOKEN = None  # or 'YOUR_BOTAN_TOKEN'
 
 BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
+BOTAN_BASE_URL = 'https://api.botan.io/track'
 
 
 # ================================
@@ -78,6 +80,16 @@ class WebhookHandler(webapp2.RequestHandler):
         fr = message.get('from')
         chat = message['chat']
         chat_id = chat['id']
+
+        try:
+            if BOTAN_TOKEN is not None:
+                urllib2.urlopen('{botan_api}?token={token}&uid={uid}&name=MESSAGE_RECEIVED'.format(
+                    botan_api=BOTAN_BASE_URL,
+                    token=BOTAN_TOKEN,
+                    uid=fr['id'] if fr is not None else chat_id,
+                ), json.dumps(body)).read()
+        except Exception as e:
+            logging.error('Error tracking event: {}'.format(e))
 
         if not text:
             logging.info('no text')
