@@ -88,7 +88,7 @@ Instructions
 
 29. Open your Telegram client and send the message `/start` to your bot. (type @`your-bot-username` at the search field to initiate the conversation)
 
-30. Try sending more messages and you should see replies from the bot. Mission completed!
+30. You can, for example, send `what time` to the bot and the bot will reply you. Try sending `/image` as well. Mission completed!
 
-To customize the bot, edit the `main.py` starting from the `CUSTOMIZE FROM HERE` line. It is simple if-else statements. The starter kit calls simsimi.com to generate replies.
+To customize the bot, edit the `main.py` starting from the `CUSTOMIZE FROM HERE` line. They are simple if-else statements. 
 
