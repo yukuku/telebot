@@ -71,7 +71,10 @@ class WebhookHandler(webapp2.RequestHandler):
         self.response.write(json.dumps(body))
 
         update_id = body['update_id']
-        message = body['message']
+        try:
+            message = body['message']
+        except:
+            message = body['edited_message']
         message_id = message.get('message_id')
         date = message.get('date')
         text = message.get('text')
