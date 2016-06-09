@@ -48,7 +48,7 @@ Instructions
 
 13. @botfather replies with `Success! The new status is: DISABLED. /help`
 
-14. Go to https://console.developers.google.com/project
+14. Go to https://console.cloud.google.com/project
 
 15. Click `Create Project`
 
