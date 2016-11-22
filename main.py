@@ -123,6 +123,17 @@ class WebhookHandler(webapp2.RequestHandler):
                 output = StringIO.StringIO()
                 img.save(output, 'JPEG')
                 reply(img=output.getvalue())
+            elif text.startswith('/google'):
+                query = text.encode('utf-8')
+                query = query[7:]
+                query = urllib.urlencode ( { 'q' : query } )
+                url = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&%s' % query
+                search_response = urllib.urlopen(url)
+                search_results = search_response.read()
+                results = json.loads(search_results)
+                data = results[ 'responseData' ]
+                hits = data['results']
+                for h in hits: reply(h['url'])
             else:
                 reply('What command?')
 
