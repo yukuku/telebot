@@ -59,7 +59,8 @@ class SetWebhookHandler(webapp2.RequestHandler):
         urlfetch.set_default_fetch_deadline(60)
         url = self.request.get('url')
         if url:
-            self.response.write(json.dumps(json.load(urllib2.urlopen(BASE_URL + 'setWebhook', urllib.urlencode({'url': url})))))
+            self.response.write(json.dumps(json.load(urllib2.urlopen(BASE_URL + 'setWebhook',
+                                                                     urllib.urlencode({'url': url})))))
 
 
 class WebhookHandler(webapp2.RequestHandler):
@@ -81,12 +82,12 @@ class WebhookHandler(webapp2.RequestHandler):
         fr = message.get('from')
         chat = message['chat']
         chat_id = chat['id']
-
+        who = ['who are you', 'Who are you']
         if not text:
             logging.info('no text')
             return
 
-        def reply(msg=None, img=None):
+        def reply(msg=None, img=None, audio=None, document=None, location=None):
             if msg:
                 resp = urllib2.urlopen(BASE_URL + 'sendMessage', urllib.urlencode({
                     'chat_id': str(chat_id),
@@ -94,6 +95,7 @@ class WebhookHandler(webapp2.RequestHandler):
                     'disable_web_page_preview': 'true',
                     'reply_to_message_id': str(message_id),
                 })).read()
+
             elif img:
                 resp = multipart.post_multipart(BASE_URL + 'sendPhoto', [
                     ('chat_id', str(chat_id)),
@@ -101,8 +103,33 @@ class WebhookHandler(webapp2.RequestHandler):
                 ], [
                     ('photo', 'image.jpg', img),
                 ])
+
+            elif audio:
+                resp = multipart.post_multipart(BASE_URL + 'sendAudio', [
+                    ('chat_id', str(chat_id)),
+                    ('reply_to_message_id', str(message_id)),
+                ], [
+                    ('audio', 'audio.mp3', audio),
+                ])
+
+            elif document:
+                resp = multipart.post_multipart(BASE_URL + 'sendDocument', [
+                    ('chat_id', str(chat_id)),
+                    ('reply_to_message_id', str(message_id)),
+                ], [
+                    ('document', 'document.pdf', document),
+                ])
+
+            elif location:
+                resp = urllib2.urlopen(BASE_URL + 'sendLocation', urllib.urlencode({
+                    'chat_id': str(chat_id),
+                    'latitude': location[0],
+                    'longitude': location[1],
+                    'reply_to_message_id': str(message_id),
+                })).read()
+
             else:
-                logging.error('no msg or img specified')
+                logging.error('no msg or action specified')
                 resp = None
 
             logging.info('send response:')
@@ -110,11 +137,13 @@ class WebhookHandler(webapp2.RequestHandler):
 
         if text.startswith('/'):
             if text == '/start':
-                reply('Bot enabled')
+                reply('Bot enabled ' + u'\U0001F60E' + ', digit /help to list all available commands')
                 setEnabled(chat_id, True)
+
             elif text == '/stop':
                 reply('Bot disabled')
                 setEnabled(chat_id, False)
+
             elif text == '/image':
                 img = Image.new('RGB', (512, 512))
                 base = random.randint(0, 16777216)
@@ -123,20 +152,63 @@ class WebhookHandler(webapp2.RequestHandler):
                 output = StringIO.StringIO()
                 img.save(output, 'JPEG')
                 reply(img=output.getvalue())
+
+            elif text == '/my_image':
+                img = Image.open('image.jpg')
+                output = StringIO.StringIO()
+                img.save(output, 'JPEG')
+                reply(img=output.getvalue())
+
+            elif text == '/audio':
+                audio_file = open('audio.mp3')
+                audio = audio_file.read()
+                reply(audio=audio)
+
+            elif text == '/pdf':
+                document_file = open('document.pdf')
+                document = document_file.read()
+                reply(document=document)
+
+            elif text == '/location':
+                location = [40.748817, -73.985428]
+                reply(location=location)
+
+            elif text == '/help':
+                reply('Hello '+fr['first_name']+' here you can control me by sending these commands:\n\n'
+                      '/image: generate sample image\n/my_image: get custom image\n'
+                      '/audio: get house sample\n/pdf: get sample document\n/location: get default location\n')
             else:
-                reply('What command?')
+                reply('What command? Try /help')
 
-        # CUSTOMIZE FROM HERE
-
-        elif 'who are you' in text:
-            reply('telebot starter kit, created by yukuku: https://github.com/yukuku/telebot')
+        elif any(s in text for s in who):
+            reply('My name is telegram_engine bot! nice to meet you '+fr['first_name']+'!')
         elif 'what time' in text:
-            reply('look at the corner of your screen!')
+            reply('look at the top of your screen! ' + u'\U0001F51D')
         else:
-            if getEnabled(chat_id):
-                reply('I got your message! (but I do not know how to answer)')
+            # coding: utf-8
+            from lib.simsimi import SimSimi
+            from lib.language_codes import LC_ENGLISH
+            from lib.simsimi import SimSimiException
+
+            back = ""
+            simSimi = SimSimi(conversation_language=LC_ENGLISH,
+                              conversation_key='YOUR_SIMSIMI_TOKEN')
+
+            try:
+                from unicodedata import normalize
+                text = normalize('NFKD', text).encode('ASCII', 'ignore')
+                response = simSimi.getConversation(text)
+                if not response['response']:
+                    reply('You exceeded simsimi api daily limit!')
+                back = response['response']
+            except SimSimiException as e:
+                    print e
+            if not back:
+                reply('Something went wrong..')
+            elif 'I HAVE NO RESPONSE' in back:
+                reply('you said something with no meaning')
             else:
-                logging.info('not enabled for chat_id {}'.format(chat_id))
+                reply(back)
 
 
 app = webapp2.WSGIApplication([
