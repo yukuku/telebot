@@ -56,7 +56,7 @@ Instructions
 
     ![App Engine registration](http://i.imgur.com/mxw8owO.png)
     
-17. Clone this repository. If you don't understand what I am saying, click the `Download ZIP` button on the lower-right of this page, and extract the ZIP file.
+17. Clone this repository. If you don't understand what I said, click the green `Clone or download` button on this page, click `Download ZIP`, and extract the ZIP file.
 
 18. Open `app.yaml` file using a good text editor like Sublime Text. Change the `YOUR_APP_ID_HERE` to the Project ID you set on step 16, and save the file.
 
