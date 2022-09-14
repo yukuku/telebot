@@ -1,5 +1,7 @@
 # telebot
-Telegram Bot starter kit. Very easy to install with Google App Engine.
+Telegram Bot starter kit. Very easy to install with Google App Engine. 
+[![kandi X-Ray](https://kandi.openweaver.com/badges/xray.svg)](https://kandi.openweaver.com/python/yukuku/telebot)
+[![kandi Featured](https://kandi.openweaver.com/badges/featured.svg)](https://kandi.openweaver.com/collections/python/python-telegram-bot)
 
 Reddit post: http://www.reddit.com/r/Telegram/comments/3b1pwl/create_your_own_telegram_bot_stepbystep/
 
